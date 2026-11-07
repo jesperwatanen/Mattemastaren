@@ -60,6 +60,8 @@
 .answer-option{border:2px solid #dfd2f7;border-radius:20px;background:#fff;min-height:78px;display:flex;align-items:center;justify-content:center;gap:12px;color:#3c2979;box-shadow:0 5px 0 #dfd3f5;font-weight:1000;touch-action:manipulation}
 .answer-option strong{font-size:clamp(26px,7vw,38px);line-height:1.1}.answer-option small{font-size:12px;color:#a08abc;align-self:flex-start;margin-top:11px}
 .answer-option:nth-child(2n){background:#f6f0ff}.answer-option:disabled{opacity:.62;cursor:default}.answer-option.picked{background:#deffdd;border-color:#61b875;color:#245a30;opacity:1}
+.answer-option.picked.miss{background:#ffe4e4;border-color:#d97082;color:#98253f}
+.answer-option.revealed{background:#dfffee;border-color:#5bb87e;color:#275b41;opacity:1}
 .result-record{text-align:center;max-width:550px}.result-record small{display:block;margin-top:8px}
 @media(min-width:620px){.record-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(max-width:370px){.answer-option{min-height:69px}.answer-grid{gap:9px}.record-tile{min-height:95px}}
@@ -392,7 +394,7 @@ if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.s
   function pickAnswer(value){
     if(!game||game.locked||game.isFinished)return;
     if(game.mode==='sprint'&&Date.now()>=game.deadline){finishGame();return}
-    document.querySelectorAll('[data-answer]').forEach(btn=>{btn.disabled=true; if(Number(btn.dataset.answer)===value)btn.classList.add('picked')});
+    document.querySelectorAll('[data-answer]').forEach(btn=>{btn.disabled=true;const ans=Number(btn.dataset.answer);if(ans===value)btn.classList.add('picked',ans===game.question.a*game.question.b?'hit':'miss');else if(ans===game.question.a*game.question.b)btn.classList.add('revealed');});
     game.input=String(value);
     originalSubmitAnswer();
   }
