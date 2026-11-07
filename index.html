@@ -66,6 +66,75 @@
 @media(min-width:620px){.record-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(max-width:370px){.answer-option{min-height:69px}.answer-grid{gap:9px}.record-tile{min-height:95px}}
 
+/* v2.1 – kompakt mobilvy, tydlig rättning och lätttryckta sifferknappar */
+.topbar{height:58px}
+main{padding:2px 11px 18px}
+body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+.bottom-nav{height:calc(65px + env(safe-area-inset-bottom))}
+.navitem{padding:6px 12px;gap:1px}
+.navitem span{font-size:21px}
+.navitem small{font-size:10px}
+.hero{min-height:166px;padding:18px 18px;margin-bottom:15px;border-radius:23px}
+.hero h1{font-size:clamp(24px,6.2vw,34px)}
+.hero p{margin-bottom:10px}
+.hero-art{font-size:clamp(74px,20vw,110px);right:8px;bottom:8px}
+.stats-row{gap:7px;margin-bottom:17px}
+.stat{padding:10px 8px;border-radius:15px}
+.stat .symbol{font-size:18px}
+.stat strong{font-size:18px;margin:2px 0}
+.stat small{font-size:10px}
+.section-head{margin-bottom:8px}
+.section-head h2,h2{font-size:19px}
+.card{padding:14px;border-radius:18px;margin-bottom:12px}
+.record-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0 17px}
+.record-tile{min-height:79px;padding:7px 3px;border-radius:14px;gap:3px}
+.record-tile .record-number{font-size:25px}
+.record-tile strong{font-size:11px}
+.record-tile small{font-size:9px}
+.friends-banner{gap:9px}
+.friends-banner .friends-symbol{font-size:26px}
+.friends-banner .btn{min-height:44px}
+.mode-grid{gap:8px;margin-bottom:17px}
+.mode-card{padding:12px;border-radius:17px;min-height:129px}
+.mode-card .mode-art{font-size:29px;margin-bottom:6px}
+.mode-card strong{font-size:14px}
+.mode-card small{font-size:11px}
+.reward-banner{padding:11px}
+.level-card{padding:12px}
+.warmup-screen{margin:5px auto;padding:17px 15px 22px}
+.warmup-screen .warmup-mascot{font-size:49px;margin-bottom:5px}
+.warmup-screen .warmup-title{font-size:19px}
+.warmup-screen .muted{font-size:13px}
+.warmup-screen .wide{min-height:49px;margin:9px auto}
+.warmup-screen .best-card{margin:12px auto;padding:10px}
+.highscore-panel{margin:10px auto;padding:10px}
+.review-stack{grid-template-rows:46px 107px 46px;margin:12px auto 8px;gap:3px}
+.review-center{min-height:99px;padding:9px 6px}
+.review-neighbor .review-factors b{font-size:21px}
+.review-center .review-factors b{font-size:clamp(31px,10vw,51px)}
+.review-track{margin:9px 6px}
+.game-header{margin:5px 0 10px}
+.game-bar{margin-bottom:7px}
+.game-meta{margin:8px 3px}
+.question-card{padding:13px 12px 11px;border-radius:20px;margin-bottom:9px}
+.question-creature{font-size:39px;margin-bottom:4px}
+.choice-game .question-card{margin-bottom:7px;padding:12px 10px 10px}
+.choice-game .equation{font-size:clamp(28px,8vw,45px);margin:8px auto 5px}
+.choice-game .feedback{margin-top:4px;min-height:30px}
+.answer-grid{gap:9px;margin:8px auto 13px}
+.answer-option{min-height:66px;border-radius:15px;box-shadow:0 3px 0 #dfd3f5}
+.answer-option strong{font-size:clamp(25px,7vw,35px)}
+.answer-option.picked.miss strong{font-size:clamp(18px,5vw,25px);text-decoration:line-through;text-decoration-thickness:3px}
+.answer-option.revealed strong{font-size:clamp(31px,8vw,43px)}
+.choice-game .feedback.correction-feedback{display:flex;flex-wrap:wrap;min-height:57px;gap:8px 16px;background:#f2fbef;border-radius:13px;padding:5px 9px}
+.wrong-response{font-size:14px;color:#a64356}
+.wrong-response del{font-size:20px;font-weight:1000;text-decoration-thickness:3px}
+.correct-response{font-size:16px;color:#2e6a42}
+.correct-response strong{font-size:clamp(28px,8vw,39px);color:#176a39}
+.choice-game .cheer{font-size:11px;margin:8px 0}
+@media(min-width:620px){.record-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:380px){.hero{min-height:164px}.hero-art{font-size:72px}.answer-option{min-height:61px}.record-tile strong{font-size:10px}}
+
   </style>
 
 </head>
@@ -159,7 +228,7 @@ function submitAnswer(){if(!game||game.locked||!game.input)return;const now=Date
 let reward=0;let points=0;
 if(correct){f.correct++;f.lastMs=ms;f.mastery=Math.min(8,(f.mastery||0)+(ms<=4000?1.5:ms<=7000?1:.5));game.correct++;game.combo++;game.maxCombo=Math.max(game.maxCombo,game.combo);p.combo++;p.bestCombo=Math.max(p.bestCombo,p.combo);p.totalCorrect++;p.totalMs+=ms;p.fastestMs=p.fastestMs?Math.min(p.fastestMs,ms):ms;game.fastest=Math.min(game.fastest,ms);let quick=ms<1800?14:ms<3000?10:ms<5000?6:ms<8000?3:0;points=10+quick+Math.min(10,Math.floor(game.combo/3)*2);reward=2+(quick>=10?2:quick>=6?1:0);game.xp+=points;game.coins+=reward;const el=document.getElementById('feedback');el.textContent=quick>=10?'⚡ Blixtsnabbt! +'+points+' XP':quick>=6?'🌟 Suveränt! +'+points+' XP':'✅ Rätt svar! +'+points+' XP';el.className='feedback good';ding(true)
 }else{f.mastery=Math.max(0,(f.mastery||0)-1);game.wrong++;game.combo=0;p.combo=0;const el=document.getElementById('feedback');el.textContent='🌱 Rätt svar: '+(q.a*q.b)+' – du lär dig!';el.className='feedback bad';ding(false)}
-p.facts[q.key]=f;p.totalAnswered++;game.answered++;game.elapsedTotal+=ms;const box=document.getElementById('answer-box');box.className='answer-box '+(correct?'correct':'wrong');box.textContent=game.input+(correct?' ✓':' ✕');if(correct)box.classList.add('sparkle');const bar=document.getElementById('game-progress');bar.style.width=(game.mode==='sprint'?pct(45000-Math.max(0,game.deadline-Date.now()),45000):pct(game.answered,game.limit))+'%';save();clearTimeout(advanceTimer);advanceTimer=setTimeout(()=>{if(!game)return;if(game.mode==='sprint'&&Date.now()>=game.deadline||game.answered>=game.limit)finishGame();else{game.question=nextQuestion();updateQuestion()}},correct?420:880)}
+p.facts[q.key]=f;p.totalAnswered++;game.answered++;game.elapsedTotal+=ms;const box=document.getElementById('answer-box');box.className='answer-box '+(correct?'correct':'wrong');box.textContent=game.input+(correct?' ✓':' ✕');if(correct)box.classList.add('sparkle');const bar=document.getElementById('game-progress');bar.style.width=(game.mode==='sprint'?pct(45000-Math.max(0,game.deadline-Date.now()),45000):pct(game.answered,game.limit))+'%';save();clearTimeout(advanceTimer);advanceTimer=setTimeout(()=>{if(!game)return;if(game.mode==='sprint'&&Date.now()>=game.deadline||game.answered>=game.limit)finishGame();else{game.question=nextQuestion();updateQuestion()}},correct?920:1880)}
 function finishGame(){if(!game||game.isFinished)return;game.isFinished=true;clearInterval(ticker);clearTimeout(advanceTimer);const p=active();const g=game;p.xp+=g.xp;p.coins+=g.coins;p.sessions++;const d=today();if(!p.daysPlayed.includes(d))p.daysPlayed.push(d);p.lastPlayed=d;let win=g.mode==='boss'&&g.correct>=10;if(win){p.bossWins++;p.xp+=80;p.coins+=35}if(g.mode==='sprint')p.sprintBest=Math.max(p.sprintBest,g.correct);const newOnes=checkAchievements(p);const newLevel=level(p);const levelGain=newLevel-g.startLevel;if(levelGain>0)p.coins+=levelGain*20;save();game=null;page='result';headers();document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('active'));const successRate=g.answered?Math.round(g.correct/g.answered*100):0;document.getElementById('main').innerHTML=`<section class="game-shell"><div class="results-top"><span class="results-art">${g.mode==='boss'?(win?'🏆':'🐲'):successRate>=90?'🏆':successRate>=60?'🌟':'🦊'}</span><p class="eyebrow">UPPDRAG SLUTFÖRT</p><h1>${g.mode==='boss'?(win?'Draken är besegrad!':'Du utmanade draken!'):g.correct===0?'Bra att du tränar!':successRate>=90?'Fantastiskt jobbat!':'Du blir starkare!'}</h1><p>${g.mode==='sprint'?'Tiden är slut! Du kämpade riktigt bra.':g.mode==='boss'&&!win?'Öva några tal och utmana draken igen!':'Varje gång du övar blir din hjärna snabbare.'}</p></div><div class="result-stats"><div class="result-box"><strong>${g.correct}/${g.answered}</strong><small>Rätt svar</small></div><div class="result-box"><strong>+${g.xp+(win?80:0)}</strong><small>XP intjänade</small></div><div class="result-box"><strong>+${g.coins+(win?35:0)+levelGain*20+newOnes.length*15}</strong><small>Stjärnmynt</small></div></div><div class="reward-list">${g.maxCombo>=3?`<div class="reward-item">🔥 Bästa svit: ${g.maxCombo} rätt</div>`:''}${g.fastest<Infinity?`<div class="reward-item">⚡ Snabbast: ${(g.fastest/1000).toFixed(1)} s</div>`:''}${levelGain>0?`<div class="reward-item">🎉 Ny nivå: ${newLevel}!</div>`:''}${win?`<div class="reward-item">🐲 Bossbonus: +80 XP</div>`:''}${newOnes.map(a=>`<div class="reward-item">${a.emoji} Ny medalj: ${escapeHtml(a.name)}!</div>`).join('')}</div><div class="stack"><button class="btn btn-purple" id="play-again">🔁 Spela igen</button><button class="btn btn-outline" id="back-home">🏰 Till startsidan</button></div><p class="cheer">💜 Kom ihåg: en kort paus hjälper hjärnan att lära sig!</p></section>`;document.getElementById('play-again').onclick=()=>startGame(g.mode,g.table);document.getElementById('back-home').onclick=()=>{page='home';render()};if(levelGain>0||newOnes.length)ding(true)}
 function confirmExit(){if(!game)return;showModal(`<div class="modal-heading"><h2>Avsluta uppdraget?</h2><button class="close-modal" data-close>×</button></div><p class="muted">Du får behålla den träning du redan gjort, men omgångens XP och mynt delas ut när du avslutar.</p><div class="inline-buttons"><button class="btn btn-outline" data-close>Fortsätt spela</button><button class="btn btn-purple" id="end-now">Avsluta omgången</button></div>`);document.getElementById('end-now').onclick=()=>{closeModal();finishGame()}}
 function openTablePicker(){const p=active();choiceTable=0;showModal(`<div class="modal-heading"><h2>Vilken tabell tränar vi? 🔢</h2><button class="close-modal" data-close>×</button></div><p class="muted small">Välj en tabell. 11 och 12 låser du upp genom att spela.</p><div class="table-grid" id="table-picker">${Array.from({length:12},(_,i)=>{let n=i+1;const locked=n>maxTable(p);return `<button class="table-tile ${locked?'locked':''}" data-table="${n}" ${locked?'disabled':''}><span class="tile-emoji">${locked?'🔒':'⭐'}</span><strong>${n}:an</strong><small>${locked?'Nivå '+(n===11?5:8):'Spela'}</small></button>`}).join('')}</div>`);document.querySelectorAll('[data-table]').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.table);closeModal();startGame('table',n)})}
@@ -271,7 +340,7 @@ if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.s
     const main=document.getElementById('main');
     main.innerHTML=`<section class="warmup-screen review-screen">
       <p class="eyebrow">TITTA OCH MINNS</p><h1>Repetera ${n}:ans tabell</h1>
-      <p class="muted">Ett tal i taget, ungefär en sekund per tal.</p>
+      <p class="muted">Ett tal i taget, 1,5 sekunder per tal.</p>
       <div class="review-stack"><div id="review-prev" class="review-neighbor"></div>
        <div id="review-current" class="review-center" aria-live="off"></div>
        <div id="review-next" class="review-neighbor"></div></div>
@@ -295,7 +364,7 @@ if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.s
     reviewTimer=setInterval(()=>{
       if(reviewStep>=10){stopReview();showTableReady(n);toast('🌟 Nu är du redo!');return}
       reviewStep++;paint();
-    },1000);
+    },1500);
     scrollTo({top:0,behavior:'instant'});
   }
   // Fast tabellordning är lätt att jämföra. Tiokompisar blandas för att undvika inlärda knapprörelser.
@@ -388,15 +457,23 @@ if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.s
     document.getElementById('answer-box').classList.add('answer-status');
     document.getElementById('feedback').textContent='Välj rätt svar! ✨';
     const opts=answerOptions(q);
-    document.getElementById('answer-options').innerHTML=opts.map((v,i)=>`<button class="answer-option" data-answer="${v}" aria-label="Svar ${i+1}: ${v}"><small>${i+1}</small><strong>${v}</strong></button>`).join('');
+    document.getElementById('answer-options').innerHTML=opts.map((v,i)=>`<button class="answer-option" data-answer="${v}" aria-label="Svar ${v}"><strong>${v}</strong></button>`).join('');
     document.querySelectorAll('[data-answer]').forEach(btn=>btn.onclick=()=>pickAnswer(Number(btn.dataset.answer)));
   };
   function pickAnswer(value){
     if(!game||game.locked||game.isFinished)return;
     if(game.mode==='sprint'&&Date.now()>=game.deadline){finishGame();return}
     document.querySelectorAll('[data-answer]').forEach(btn=>{btn.disabled=true;const ans=Number(btn.dataset.answer);if(ans===value)btn.classList.add('picked',ans===game.question.a*game.question.b?'hit':'miss');else if(ans===game.question.a*game.question.b)btn.classList.add('revealed');});
+    const correctAnswer=game.question.a*game.question.b;
     game.input=String(value);
     originalSubmitAnswer();
+    if(value!==correctAnswer){
+      const fb=document.getElementById('feedback');
+      if(fb){
+        fb.className='feedback correction-feedback';
+        fb.innerHTML='<span class="wrong-response">Du valde <del>'+value+'</del></span><span class="correct-response">Rätt: <strong>'+correctAnswer+'</strong></span>';
+      }
+    }
   }
   handleDigit=function(d){
     if(!game||game.locked||game.isFinished)return;
