@@ -1,0 +1,19 @@
+{
+  "name": "Mattemästaren – Multiplikationsäventyr",
+  "short_name": "Mattemästaren",
+  "description": "Lär dig multiplikation med magiska äventyr, snabba tävlingar och belöningar.",
+  "lang": "sv",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f5ff",
+  "theme_color": "#251650",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
