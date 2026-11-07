@@ -121,7 +121,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 .choice-game .question-card{margin-bottom:7px;padding:12px 10px 10px}
 .choice-game .equation{font-size:clamp(28px,8vw,45px);margin:8px auto 5px}
 .choice-game .feedback{margin-top:4px;min-height:30px}
-.answer-grid{gap:9px;margin:8px auto 13px}
+.answer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:8px auto 13px}
 .answer-option{min-height:66px;border-radius:15px;box-shadow:0 3px 0 #dfd3f5}
 .answer-option strong{font-size:clamp(25px,7vw,35px)}
 .answer-option.picked.miss strong{font-size:clamp(18px,5vw,25px);text-decoration:line-through;text-decoration-thickness:3px}
