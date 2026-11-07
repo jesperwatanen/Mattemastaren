@@ -22,6 +22,7 @@ function profile(){return JSON.parse(localStorage.getItem('mattemastaren_v1')).p
 function chooseCorrect(expected){
  const options=[...document.querySelectorAll('[data-answer]')];
  assert.equal(options.length,6,'Varje fråga har exakt sex svar');
+ assert.equal(document.querySelectorAll('.answer-option small').length,0,'Inga extra 1–6 på svarsknapparna');
  assert.equal(new Set(options.map(b=>b.dataset.answer)).size,6,'Svarsalternativen är unika');
  const btn=options.find(b=>Number(b.dataset.answer)===expected);
  assert.ok(btn,'Rätt svar måste finnas bland alternativen: '+expected);
@@ -40,13 +41,15 @@ test('barnprofil, kanin, repetition och felfritt tabellrekord',async()=>{
   assert.match(document.body.textContent,/Är du redo/);
   click('#ready-repeat');
   assert.match(get('#review-current').textContent,/1×3=3/);
-  await sleep(1100);
+  await sleep(1050);
+  assert.match(get('#review-current').textContent,/1×3=3/,'Varje tal ska visas i 1,5 sekunder');
+  await sleep(550);
   assert.match(get('#review-current').textContent,/2×3=6/);
   click('#review-start');
   for(let n=1;n<=10;n++){
     assert.match(get('#equation').textContent,new RegExp('^'+n+' × 3 ='));
     chooseCorrect(n*3);
-    await sleep(490);
+    await sleep(1020);
   }
   assert.match(document.body.textContent,/NYTT PERSONBÄSTA/);
   assert.equal(typeof profile().tableRecords['3'],'number');
@@ -62,10 +65,27 @@ test('tiokompisar på tid med sex alternativ och rekord',async()=>{
     const m=eq.match(/^(\d+) \+ \? = 10$/);
     assert.ok(m,'Tiokompisfråga: '+eq);
     chooseCorrect(10-Number(m[1]));
-    await sleep(490);
+    await sleep(1020);
   }
   assert.match(document.body.textContent,/NYTT PERSONBÄSTA/);
   assert.ok(profile().friendsBestMs>0);
+  click('#back-home');
+});
+test('fel svar visar överstruket val och stort korrekt svar',async()=>{
+  click('[data-ready-table="2"]');
+  click('#ready-start');
+  const expected=2;
+  const wrong=[...document.querySelectorAll('[data-answer]')].find(b=>Number(b.dataset.answer)!==expected);
+  assert.ok(wrong,'Det måste finnas ett felaktigt alternativ');
+  const wrongNumber=wrong.dataset.answer;
+  wrong.click();
+  assert.equal(get('.wrong-response del').textContent,wrongNumber);
+  assert.equal(get('.correct-response strong').textContent,String(expected));
+  assert.ok(get('.answer-option.picked.miss'));
+  assert.ok(get('.answer-option.revealed'));
+  await sleep(1990);
+  click('#exit-game');
+  click('#end-now');
   click('#back-home');
 });
 test('hiscore, vänbyte och sparad historik efter omladdning',()=>{
