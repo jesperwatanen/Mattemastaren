@@ -20,6 +20,14 @@
 
 
 /* Mattemästaren v2 – sex val, tabellrace, repetition och tiokompisar */
+.highscore-panel{margin:16px auto;padding:14px;border-radius:18px;background:#f7f3ff;text-align:left}
+.highscore-panel h3{text-align:center;font-size:16px}
+.highscore-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.highscore-list li{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:11px;background:#fff;font-weight:850}
+.highscore-list li span:nth-child(2){flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.highscore-list li strong{color:#5c37b6;font-size:14px}
+.leader-medal{min-width:23px}
+
 .record-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:15px 0 26px}
 .record-tile{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;min-height:100px;padding:10px 5px;border:2px solid #e7def8;background:#fff;border-radius:18px;color:#34205d;box-shadow:0 4px 0 #e9e1f6;text-align:center}
 .record-tile:active,.answer-option:active{transform:translateY(3px);box-shadow:none}
@@ -176,6 +184,14 @@ if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.s
   const fmtTime=ms=>ms==null?'–':(ms/1000).toFixed(2).replace('.',',')+' s';
   const recordFor=(p,n)=>p.tableRecords?.[n]??null;
   function stopReview(){if(reviewTimer){clearInterval(reviewTimer);reviewTimer=null}}
+  function scoreboardFor(n){
+    const entries=state.profiles.map(p=>({name:p.name,avatar:p.avatar,ms:n==='friends'?p.friendsBestMs:p.tableRecords?.[n]}))
+      .filter(e=>typeof e.ms==='number'&&e.ms>0).sort((a,b)=>a.ms-b.ms).slice(0,6);
+    if(!entries.length)return '<p class="muted small" style="text-align:center">Inget rekord ännu. Bli den första!</p>';
+    return '<ol class="highscore-list">'+entries.map((e,i)=>
+      `<li><span class="leader-medal">${['🥇','🥈','🥉'][i]||'⭐'}</span><span>${escapeHtml(e.avatar)} ${escapeHtml(e.name)}</span><strong>${fmtTime(e.ms)}</strong></li>`
+    ).join('')+'</ol>';
+  }
   function tableTiles(p){
     return `<div class="record-grid" aria-label="Välj multiplikationstabell">${Array.from({length:12},(_,i)=>{
       const n=i+1,locked=n>maxTable(p),record=recordFor(p,n);
@@ -221,6 +237,7 @@ if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.s
       <p class="warmup-title">Är du redo?</p>
       <p class="muted">10 frågor • 6 svarsalternativ • tiden mäts när du svarar. Alla rätt ger ett tidsrekord.</p>
       <div class="best-card">🏆 Personbästa: <strong>${fmtTime(recordFor(active(),n))}</strong></div>
+      <div class="highscore-panel"><h3>🏆 Hiscore – ${n}:ans tabell</h3>${scoreboardFor(n)}</div>
       <button class="btn btn-gold wide" id="ready-start">🚀 Start!</button>
       <button class="btn btn-soft wide" id="ready-repeat">👀 Repetera först</button>
       <button class="btn btn-outline wide" id="ready-change">Välj annan tabell</button>
@@ -239,6 +256,7 @@ if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.s
       <div class="review-center"><span class="review-factors"><b>4</b> + <b>?</b> = <b>10</b></span></div>
       <p class="muted">11 frågor med talen 0–10. Välj rätt av sex alternativ så snabbt du kan. Alla rätt krävs för rekord.</p>
       <div class="best-card">🏆 Personbästa: <strong>${fmtTime(p.friendsBestMs)}</strong></div>
+      <div class="highscore-panel"><h3>🏆 Hiscore – Tiokompisar</h3>${scoreboardFor("friends")}</div>
       <button class="btn btn-gold wide" id="friends-ready-start">⚡ Start!</button>
       <button class="btn btn-outline wide" id="friends-back">Till startsidan</button>
     </section>`;
